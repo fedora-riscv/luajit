@@ -1,6 +1,6 @@
 Name:           luajit
 Version:        2.0.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Just-In-Time Compiler for Lua
 License:        MIT
 URL:            http://luajit.org/
@@ -71,6 +71,9 @@ find %{buildroot} -type f -name *.a -delete
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Sun Aug 17 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.0.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.0.3-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
