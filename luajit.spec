@@ -4,7 +4,7 @@ Name:           luajit
 Version:        2.1.0
 %global apiver %(v=%{version}; echo ${v%.${v#[0-9].[0-9].}})
 %global srcver %{version}%{?rctag:-%{rctag}}
-Release:        0.21%{?rctag:%{rctag}}%{?dist}
+Release:        0.22%{?rctag:%{rctag}}%{?dist}
 Summary:        Just-In-Time Compiler for Lua
 License:        MIT
 URL:            http://luajit.org/
@@ -60,13 +60,16 @@ make amalg Q= E=@: PREFIX=%{_prefix} TARGET_STRIP=: \
 %make_install PREFIX=%{_prefix} \
               MULTILIB=%{_lib}
 
-ln -sf luajit-2.1.0-beta3 %{buildroot}%{_bindir}/luajit
-
 rm -rf _tmp_html ; mkdir _tmp_html
 cp -a doc _tmp_html/html
 
 # Remove static .a
 find %{buildroot} -type f -name *.a -delete -print
+
+%if %{defined rctag}
+# Development versions are not doing such symlink
+ln -s %{name}-%{srcver} %{buildroot}%{_bindir}/%{name}
+%endif
 
 %ldconfig_scriptlets
 
@@ -91,6 +94,9 @@ make check || true
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Tue Oct 26 2021 Siddhesh Poyarekar <siddhesh@gotplt.org> - 2.1.0-0.22beta3
+- Bring back the earlier code to do ln -sf.
+
 * Tue Oct 12 2021 Andreas Schneider <asn@redhat.com> - 2.1.0-0.21beta3
 - Rebase onto https://github.com/LuaJIT/LuaJIT/tree/v2.1
 - Dropped support for ppc64le
