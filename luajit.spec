@@ -94,10 +94,10 @@ make check || true
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
-* Tue Oct 26 2021 Siddhesh Poyarekar <siddhesh@gotplt.org> - 2.1.0-0.22beta3
+* Mon Nov 29 2021 Siddhesh Poyarekar <siddhesh@gotplt.org> - 2.1.0-0.22beta3
 - Bring back the earlier code to do ln -sf.
 
-* Tue Oct 12 2021 Andreas Schneider <asn@redhat.com> - 2.1.0-0.21beta3
+* Mon Nov 29 2021 Andreas Schneider <asn@redhat.com> - 2.1.0-0.21beta3
 - Rebase onto https://github.com/LuaJIT/LuaJIT/tree/v2.1
 - Dropped support for ppc64le
 - Dropped support for s390x
