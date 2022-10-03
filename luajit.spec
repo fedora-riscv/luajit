@@ -1,10 +1,13 @@
+%global commit      46e62cd963a426e83a60f691dcbbeb742c7b3ba2
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
+
 Name:           luajit
-Version:        2.0.4
-Release:        3%{?dist}
+Version:        2.0.5
+Release:        1.20220913.%{shortcommit}%{?dist}
 Summary:        Just-In-Time Compiler for Lua
 License:        MIT
-URL:            http://luajit.org/
-Source0:        http://luajit.org/download/LuaJIT-%{version}.tar.gz
+URL:            https://luajit.org
+Source0:        https://github.com/LuaJIT/LuaJIT/archive/%{commit}/LuaJIT-%{shortcommit}.tar.gz
 
 %if 0%{?rhel}
 ExclusiveArch:  %{ix86} x86_64
@@ -23,7 +26,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 This package contains development files for %{name}.
 
 %prep
-%setup -q -n LuaJIT-%{version}
+%autosetup -n LuaJIT-%{commit}
 echo '#!/bin/sh' > ./configure
 chmod +x ./configure
 
@@ -76,6 +79,11 @@ find %{buildroot} -type f -name *.a -delete
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Mon Oct 03 2022 Carl George <carl@george.computer> - 2.0.5-1.20220914.46e62cd
+- Update to latest snapshot of 2.0 branch
+- Fixes CVE-2020-15890, resolves rhbz#1860331
+- Fixes CVE-2020-24372, resolves rhbz#1870308
+
 * Fri Aug 07 2015 Oliver Haessler <oliver@redhat.com> - 2.0.4-3
 - only build x86_64 on EPEL as luajit has no support for ppc64
 
