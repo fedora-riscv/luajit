@@ -4,7 +4,7 @@ Name:           luajit
 Version:        2.1.0
 %global apiver %(v=%{version}; echo ${v%.${v#[0-9].[0-9].}})
 %global srcver %{version}%{?rctag:-%{rctag}}
-Release:        0.27%{?rctag:%{rctag}}%{?dist}
+Release:        0.27%{?rctag:%{rctag}}.rv64%{?dist}
 Summary:        Just-In-Time Compiler for Lua
 License:        MIT
 URL:            http://luajit.org/
@@ -18,8 +18,10 @@ Patch0: luajit-2.1-update.patch
 # git format-patch --stdout -l1 --no-renames v2.1..v2.1-fedora > luajit-2.1-fedora.patch
 Patch1: luajit-2.1-fedora.patch
 
+Source10: luajit-riscv64.patch
+
 # ppc64le and s390x patchsets doesn't apply or build anymore
-ExclusiveArch:  %{arm} %{ix86} x86_64 %{mips} aarch64
+ExclusiveArch:  %{arm} %{ix86} x86_64 %{mips} aarch64 riscv64
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -38,6 +40,9 @@ This package contains development files for %{name}.
 
 %prep
 %autosetup -n LuaJIT-%{srcver} -p1
+%ifarch riscv64
+cat %{SOURCE10} | /usr/bin/patch -p1
+%endif
 
 # Enable Lua 5.2 features
 sed -i -e '/-DLUAJIT_ENABLE_LUA52COMPAT/s/^#//' src/Makefile
@@ -83,17 +88,25 @@ make check || true
 %doc README
 %{_bindir}/%{name}
 %{_bindir}/%{name}-%{srcver}
+%ifnarch riscv64
 %{_libdir}/lib%{name}-*.so.*
+%endif
 %{_mandir}/man1/%{name}.1*
 %{_datadir}/%{name}-%{srcver}/
 
 %files devel
 %doc _tmp_html/html/
 %{_includedir}/%{name}-%{apiver}/
+%ifnarch riscv64
 %{_libdir}/lib%{name}-*.so
+%endif
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Mon Mar 13 2023 Liu Yang <Yang.Liu.sn@gmail.com> - 2.1.0-0.27beta3.rv64
+- Add riscv64 support from: https://github.com/infiWang/LuaJIT
+- to commit: 7161fd3f1f6e45b9bc236f9dcf07afc84e693189
+
 * Sun Mar 12 2023 Andreas Schneider <asn@redhat.com> - 2.1.0-0.27beta3
 - Update to latest luajit v2.1 git version
 
